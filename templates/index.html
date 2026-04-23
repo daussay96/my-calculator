@@ -1,39 +1,148 @@
 <!DOCTYPE html>
+<!-- DOCTYPE tells the browser this is a HTML5 document -->
+
 <html lang="en">
+<!-- html tag wraps everything on the page -->
+<!-- lang="en" tells the browser this page is in English -->
+
 <head>
+    <!-- head section contains settings and styles - not visible to users -->
+
     <meta charset="UTF-8">
+    <!-- charset tells the browser to support all characters and symbols -->
+
     <title>My Calculator</title>
+    <!-- title is what appears on the browser tab -->
+
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; margin-top: 80px; background: #f0f4f8; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 320px; }
-        h1 { text-align: center; color: #333; }
-        input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; padding: 12px; background: #4f46e5; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; margin-top: 8px; }
-        button:hover { background: #4338ca; }
-        .result { text-align: center; margin-top: 16px; font-size: 22px; font-weight: bold; color: #4f46e5; }
-        .error { text-align: center; margin-top: 16px; color: red; }
+        /* Everything inside <style> is CSS - it controls how the page looks */
+
+        body {
+            /* body styles affect the whole page */
+            font-family: Arial, sans-serif;  /* Sets the font */
+            display: flex;                   /* Uses flexbox layout */
+            justify-content: center;         /* Centers content horizontally */
+            margin-top: 80px;                /* Adds space at the top */
+            background: #f0f4f8;             /* Sets the light grey background color */
+        }
+
+        .card {
+            /* .card styles the white box that contains the calculator */
+            background: white;               /* White background */
+            padding: 40px;                   /* Space inside the box */
+            border-radius: 12px;             /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);  /* Subtle shadow effect */
+            width: 320px;                    /* Fixed width of the card */
+        }
+
+        h1 {
+            /* h1 styles the Calculator heading */
+            text-align: center;              /* Centers the title */
+            color: #333;                     /* Dark grey color */
+        }
+
+        input, select {
+            /* Styles both the number inputs and the dropdown */
+            width: 100%;                     /* Full width of the card */
+            padding: 10px;                   /* Space inside the input */
+            margin: 8px 0;                   /* Space above and below */
+            border: 1px solid #ccc;          /* Light grey border */
+            border-radius: 6px;              /* Rounded corners */
+            box-sizing: border-box;          /* Prevents inputs from overflowing */
+            font-size: 16px;                 /* Text size inside inputs */
+        }
+
+        button {
+            /* Styles the Calculate button */
+            width: 100%;                     /* Full width */
+            padding: 12px;                   /* Space inside button */
+            background: #4f46e5;             /* Purple background color */
+            color: white;                    /* White text */
+            border: none;                    /* No border */
+            border-radius: 6px;              /* Rounded corners */
+            font-size: 16px;                 /* Text size */
+            cursor: pointer;                 /* Shows hand cursor on hover */
+            margin-top: 8px;                 /* Space above button */
+        }
+
+        button:hover {
+            /* Changes button color when mouse hovers over it */
+            background: #4338ca;             /* Slightly darker purple */
+        }
+
+        .result {
+            /* Styles the result text shown after calculating */
+            text-align: center;              /* Centers the result */
+            margin-top: 16px;                /* Space above result */
+            font-size: 22px;                 /* Larger text size */
+            font-weight: bold;               /* Bold text */
+            color: #4f46e5;                  /* Purple color matching button */
+        }
+
+        .error {
+            /* Styles the error message if something goes wrong */
+            text-align: center;              /* Centers the error */
+            margin-top: 16px;                /* Space above error */
+            color: red;                      /* Red color to signal an error */
+        }
     </style>
 </head>
+
 <body>
+    <!-- body section contains everything visible to the user -->
+
     <div class="card">
+        <!-- div is a container box, class="card" applies the card CSS styles -->
+
         <h1>🧮 Calculator</h1>
+        <!-- h1 is the main heading of the page -->
+
         <form method="POST">
+            <!-- form sends data to Flask when submitted -->
+            <!-- method="POST" means send the data to the server -->
+
+            <!-- First number input field -->
+            <!-- type="number" only allows numbers to be typed -->
+            <!-- name="num1" is how Flask identifies this field (request.form["num1"]) -->
+            <!-- placeholder is the grey hint text shown before typing -->
+            <!-- step="any" allows decimal numbers -->
+            <!-- required means the form won't submit if this is empty -->
             <input type="number" name="num1" placeholder="First number" step="any" required>
+
+            <!-- Dropdown menu to select the operation -->
+            <!-- name="operation" is how Flask identifies this (request.form["operation"]) -->
             <select name="operation">
+                <!-- each option has a value that Flask reads, and a label the user sees -->
                 <option value="add">➕ Addition</option>
                 <option value="subtract">➖ Subtraction</option>
                 <option value="multiply">✖️ Multiplication</option>
                 <option value="divide">➗ Division</option>
             </select>
+
+            <!-- Second number input field -->
             <input type="number" name="num2" placeholder="Second number" step="any" required>
+
+            <!-- Submit button - clicking this sends the form data to Flask -->
             <button type="submit">Calculate</button>
         </form>
+
+        <!-- Jinja2 templating - this is Flask's way of showing Python data in HTML -->
+
+        <!-- Check if result exists - "is not none" means Flask sent back an answer -->
         {% if result is not none %}
+            <!-- Display the result inside a styled div -->
+            <!-- {{ result }} is replaced by the actual number from Flask -->
             <div class="result">= {{ result }}</div>
         {% endif %}
+        <!-- endif closes the if block -->
+
+        <!-- Check if there is an error message to show -->
         {% if error %}
+            <!-- Display the error inside a styled div -->
+            <!-- {{ error }} is replaced by the actual error message from Flask -->
             <div class="error">⚠️ {{ error }}</div>
         {% endif %}
+
     </div>
 </body>
 </html>
