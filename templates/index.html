@@ -132,7 +132,7 @@
         {% if result is not none %}
             <!-- Display the result inside a styled div -->
             <!-- {{ result }} is replaced by the actual number from Flask -->
-            <div class="result">= {{ result }}</div>
+            <div class="result">= {{ result | int if result == result | int else result }}</div>
         {% endif %}
         <!-- endif closes the if block -->
 
